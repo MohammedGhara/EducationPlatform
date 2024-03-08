@@ -21,7 +21,6 @@ class SignupViewTests(TestCase):
         self.assertRedirects(response, reverse('profile'))
 
         def test_successful_signup(self):
-            """Test that a user can sign up successfully with valid data."""
             url = reverse('signup')
             data = {
                 'username': 'newuser',
