@@ -10,3 +10,8 @@ class SignupParent(UserCreationForm):
     class Meta:
         model = User
         fields = ['username','email','password1','password2']
+
+class SignupLecturer(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username','email','password1','password2']
