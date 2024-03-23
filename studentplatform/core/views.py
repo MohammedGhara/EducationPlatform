@@ -52,5 +52,50 @@ def loginstudent(request):
 
 
 
+def loginadmin(request):
+    if request.method == "GET" :
+        return render(request,'loginadmin.html')
+    elif request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username,password=password)
+        if user is not None:
+            login(request,user)
+            return redirect('homepage')
+        else:
+            print("wrong username or password")
+            return redirect('loginadmin')
+
+
+def loginparent(request):
+    if request.method == "GET" :
+        return render(request,'loginparent.html')
+    elif request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username,password=password)
+        if user is not None:
+            login(request,user)
+            return redirect('homepage')
+        else:
+            print("wrong username or password")
+            return redirect('loginparent')
+
+def loginlecturer(request):
+    if request.method == "GET" :
+        return render(request,'loginlecturer.html')
+    elif request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username,password=password)
+        if user is not None:
+            login(request,user)
+            return redirect('homepage')
+        else:
+            print("wrong username or password")
+            return redirect('loginlecturer')
+
+
+
 def homepage(request):
     return render(request , 'homepage.html')
