@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.views.generic.edit import CreateView
 from django.contrib.auth.models import User
 from .forms import *
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import  authenticate , login
 # Create your views here.
 
 
@@ -33,6 +35,20 @@ class SignupParent(CreateView):
             user = form.save()
             return redirect('homepage')
 
+
+def loginstudent(request):
+    if request.method == "GET" :
+        return render(request,'loginstudent.html')
+    elif request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username,password=password)
+        if user is not None:
+            login(request,user)
+            return redirect('homepage')
+        else:
+            print("wrong username or password")
+            return redirect('loginstudent')
 
 
 
