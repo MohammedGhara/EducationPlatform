@@ -45,9 +45,9 @@ def loginstudent(request):
         user = authenticate(username=username,password=password)
         if user is not None:
             login(request,user)
-            return redirect('homepage')
+            return redirect('modelstudent')
         else:
-            print("wrong username or password")
+            print("Make sure that your Username and password are correct")
             return redirect('loginstudent')
 
 
@@ -63,7 +63,7 @@ def loginadmin(request):
             login(request,user)
             return redirect('homepage')
         else:
-            print("wrong username or password")
+            print("Make sure that your Username and password are correct")
             return redirect('loginadmin')
 
 
@@ -78,7 +78,8 @@ def loginparent(request):
             login(request,user)
             return redirect('homepage')
         else:
-            print("wrong username or password")
+            print("Make sure that your Username and password are correct")
+
             return redirect('loginparent')
 
 def loginlecturer(request):
@@ -90,12 +91,18 @@ def loginlecturer(request):
         user = authenticate(username=username,password=password)
         if user is not None:
             login(request,user)
-            return redirect('homepage')
+            return redirect('modellecturer')
         else:
-            print("wrong username or password")
+            print("Make sure that your Username and password are correct")
             return redirect('loginlecturer')
 
 
+def modelstudent(request):
+     return render(request,'modelstudent.html')
+
+
+def modellecturer(request):
+    return render(request, 'modellecturer.html')
 
 def homepage(request):
     return render(request , 'homepage.html')
