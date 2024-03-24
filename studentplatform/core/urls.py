@@ -22,6 +22,8 @@ urlpatterns = [
     path('send', views.send, name='send'),
     path('getMessages/<str:room>/', views.getMessages, name='getMessages'),
     path('aaaa/', views.home, name='home'),
+    path('se', views.getMessages, name='getMessages'),
+    path('search',views.search,name='search')
 
 
 ]

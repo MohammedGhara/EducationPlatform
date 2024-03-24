@@ -45,9 +45,10 @@
             <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/">Log out</a>
           </li>
         </ul>
-        <form class="d-flex" role="search">
+        <form class="d-flex" role="search"  method=POST action="{% url 'search' %}" name="search">
+          {% csrf_token %}
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <button class="btn btn-outline-secondary" type="submit">Search</button>
         </form>
       </div>
     </div>

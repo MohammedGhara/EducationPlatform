@@ -58,7 +58,7 @@ def loginstudent(request):
         user = authenticate(username=username,password=password)
         if user is not None:
             login(request,user)
-            return redirect('modelstudent')
+            return redirect('homepage')
         else:
             print("Make sure that your Username and password are correct")
             return redirect('loginstudent')
@@ -108,7 +108,7 @@ def loginlecturer(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('homepage')
+    return redirect('loginstudent')
 
 
 
@@ -165,3 +165,6 @@ def getMessages(request, room):
 
     messages = Message.objects.filter(room=room_details.id)
     return JsonResponse({"messages":list(messages.values())})
+
+def search(request):
+    return  render(request,'modelstudent.html')
