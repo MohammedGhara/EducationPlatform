@@ -118,6 +118,9 @@ def algebrastudent(request):
 
 def homepage(request):
     return render(request , 'homepage.html')
+def home(request):
+    return render(request, 'home.html')
+
 def room(request, room):
     username = request.GET.get('username')
     room_details = Room.objects.get(name=room)
@@ -126,6 +129,7 @@ def room(request, room):
         'room': room,
         'room_details': room_details
     })
+
 def checkview(request):
     room = request.POST['room_name']
     username = request.POST['username']
@@ -136,8 +140,7 @@ def checkview(request):
         new_room = Room.objects.create(name=room)
         new_room.save()
         return redirect('/'+room+'/?username='+username)
-def home(request):
-    return render(request, 'home.html')
+
 def send(request):
     message = request.POST['message']
     username = request.POST['username']
@@ -146,11 +149,9 @@ def send(request):
     new_message = Message.objects.create(value=message, user=username, room=room_id)
     new_message.save()
     return HttpResponse('Message sent successfully')
+
 def getMessages(request, room):
     room_details = Room.objects.get(name=room)
 
     messages = Message.objects.filter(room=room_details.id)
     return JsonResponse({"messages":list(messages.values())})
-def my_view(request):
-    username = request.user.username if request.user.is_authenticated else None
-    return render(request, 'room.html', {'username': username})
