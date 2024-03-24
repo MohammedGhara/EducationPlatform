@@ -103,6 +103,10 @@ def modelstudent(request):
 
 def modellecturer(request):
     return render(request, 'modellecturer.html')
+def calculusstudent(request):
+    return render(request, 'calculusstudent.html')
+def algebrastudent(request):
+    return render(request, 'algebrastudent.html')
 
 def homepage(request):
     return render(request , 'homepage.html')

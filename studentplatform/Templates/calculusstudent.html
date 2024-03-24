@@ -2,34 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Model</title>
-
-
+    <title>StudentReference</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-  <style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 50%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div style="background-color: #4cdac2" class="container-fluid">
-      <a class="navbar-brand" href="http://127.0.0.1:8000/">Education student platform</a>
+      <a class="navbar-brand" href="#">Education student platform</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -69,38 +50,37 @@ tr:nth-child(even) {
       </div>
     </div>
   </nav>
+<br>
   <center>
- <h2 class="CourseStudent">CourseStudent</h2>
-
-
-<table style="width:75%">
+    <h2>CalculusSubjects</h2>
+<style>
+table, th, td {
+  border:1px solid black;
+  border-collapse: collapse;
+}
+</style>
+<table style="width:50%">
   <tr>
-    <h1 >
-    <th style="background-color:hsl(0, 60%, 50%);"><strong>Course</strong></th>
-    <th style="background-color:hsl(0, 60%, 50%);"><strong>Videos</strong></th>
-    <th style="background-color:hsl(0, 60%, 50%);"><strong>Chats</strong></th>
-    </h1>
+    <th style="width:20%"><strong>#</strong></th>
+    <th><strong>NameSubject</strong></th>
+    <th><strong>Video</strong></th>
   </tr>
   <tr>
-    <td>Calculus</td>
-    <td><a href=http://127.0.0.1:8000/calculusstudent/>link video</a></td>
-    <td>link chat</td>
+    <td><strong>1)</strong></td>
+    <td>רציפות של פונקציות</td>
+    <td><a href="https://www.youtube.com/watch?v=olTV-CU-YoM&list=PLyPpyCLK_5ZgDMNRNRUlPrzReuRh3AvW4">PressHere</a></td>
+  </tr>
   </tr>
   <tr>
-    <td>Linear Algebra</td>
-    <td><a href="http://127.0.0.1:8000/algebrastudent/">link video</a></td>
-    <td>link chat</td>
+    <td><strong>2)</strong></td>
+    <td>נגזרות</td>
+    <td><a href="https://www.youtube.com/watch?v=i0cpOIv7MZ0&list=PLyPpyCLK_5ZiJTdeJtJXBoIXvgs15OeHL">PressHere</a></td>
   </tr>
   <tr>
-    <td>Python</td>
-    <td>link video</td>
-    <td>link chat</td>
+    <td><strong>3)</strong></td>
+    <td>טור טילור ומקלורן</td>
+    <td ><a href="https://www.youtube.com/watch?v=vJNbzZ68SZ8&list=PLyPpyCLK_5Zh9VcpWRVZ-zCUQTI37maWy">PressHere</a></td>
   </tr>
-
 </table>
-
-
-</center>
+    </center>
 </body>
-
-</html>

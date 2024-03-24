@@ -11,6 +11,8 @@ urlpatterns = [
     path('loginlecturer/',loginlecturer, name='loginlecturer'),
     path('modelstudent/', modelstudent, name='modelstudent'),
     path('modellecturer/', modellecturer, name='modellecturer'),
+    path('calculusstudent/', calculusstudent, name='calculusstudent'),
+    path('algebrastudent/', algebrastudent, name='algebrastudent')
 
 
 ]
