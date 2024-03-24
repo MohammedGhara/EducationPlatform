@@ -1,10 +1,13 @@
 from django.shortcuts import render , redirect
-from django.http import HttpResponse
+from django.http import HttpResponse , JsonResponse
 from django.views.generic.edit import CreateView
 from django.contrib.auth.models import User
 from .forms import *
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import  authenticate , login
+from django.contrib.auth import  authenticate , login , logout
+from .models import Room , Message
+
+
 # Create your views here.
 
 
@@ -96,9 +99,14 @@ def loginlecturer(request):
             print("Make sure that your Username and password are correct")
             return redirect('loginlecturer')
 
+def logout_user(request):
+    logout(request)
+    return redirect('homepage')
+
+
 
 def modelstudent(request):
-     return render(request,'modelstudent.html')
+    return render(request,'modelstudent.html')
 
 
 def modellecturer(request):
@@ -106,3 +114,39 @@ def modellecturer(request):
 
 def homepage(request):
     return render(request , 'homepage.html')
+def room(request, room):
+    username = request.GET.get('username')
+    room_details = Room.objects.get(name=room)
+    return render(request, 'room.html', {
+        'username': username,
+        'room': room,
+        'room_details': room_details
+    })
+def checkview(request):
+    room = request.POST['room_name']
+    username = request.POST['username']
+
+    if Room.objects.filter(name=room).exists():
+        return redirect('/'+room+'/?username='+username)
+    else:
+        new_room = Room.objects.create(name=room)
+        new_room.save()
+        return redirect('/'+room+'/?username='+username)
+def home(request):
+    return render(request, 'home.html')
+def send(request):
+    message = request.POST['message']
+    username = request.POST['username']
+    room_id = request.POST['room_id']
+
+    new_message = Message.objects.create(value=message, user=username, room=room_id)
+    new_message.save()
+    return HttpResponse('Message sent successfully')
+def getMessages(request, room):
+    room_details = Room.objects.get(name=room)
+
+    messages = Message.objects.filter(room=room_details.id)
+    return JsonResponse({"messages":list(messages.values())})
+def my_view(request):
+    username = request.user.username if request.user.is_authenticated else None
+    return render(request, 'room.html', {'username': username})
