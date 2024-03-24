@@ -20,6 +20,16 @@ class SignupStudent(CreateView):
     def form_valid(self,form):
         user = form.save()
         return redirect('homepage')
+
+class Signupadmin(CreateView):
+    model = User
+    form_class = Signupadmin
+    template_name = 'signupadmin.html'
+
+
+    def form_valid(self,form):
+        user = form.save()
+        return redirect('homepage')
 class SignupLecturer(CreateView):
     model = User
     form_class = SignupLecturer
@@ -56,33 +66,30 @@ def loginstudent(request):
 
 
 def loginadmin(request):
-    if request.method == "GET" :
-        return render(request,'loginadmin.html')
+    if request.method == "GET":
+        return render(request, 'loginadmin.html')
     elif request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username,password=password)
+        user = authenticate(username=username, password=password)
         if user is not None:
-            login(request,user)
-            return redirect('homepage')
+            login(request, user)
+            return redirect('adminpage')
         else:
             print("Make sure that your Username and password are correct")
             return redirect('loginadmin')
-
-
 def loginparent(request):
-    if request.method == "GET" :
-        return render(request,'loginparent.html')
+    if request.method == "GET":
+        return render(request, 'loginparent.html')
     elif request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username,password=password)
+        user = authenticate(username=username, password=password)
         if user is not None:
-            login(request,user)
-            return redirect('http://127.0.0.1:8000/modelparent/')
+            login(request, user)
+            return redirect('modelparent')
         else:
             print("Make sure that your Username and password are correct")
-
             return redirect('loginparent')
 
 def loginlecturer(request):
@@ -121,6 +128,8 @@ def homepage(request):
     return render(request , 'homepage.html')
 def home(request):
     return render(request, 'home.html')
+def adminpage(request):
+    return render(request, 'adminpage.html')
 
 def room(request, room):
     username = request.GET.get('username')

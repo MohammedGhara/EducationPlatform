@@ -8,10 +8,12 @@ urlpatterns = [
     path('signupparent/',SignupParent.as_view() , name='signupparent'),
     path('signuplecturer/',SignupLecturer.as_view() , name='signupLecturer'),
     path('loginstudent/',loginstudent, name='loginstudent'),
+    path('loginadmin/',loginadmin, name='loginadmin'),
     path('loginparent/',loginparent, name='loginparent'),
     path('loginlecturer/',loginlecturer, name='loginlecturer'),
     path('modelstudent/', modelstudent, name='modelstudent'),
     path('modellecturer/', modellecturer, name='modellecturer'),
+    path('adminpage/',adminpage, name='adminpage'),
     path('modelparent/', modelparent, name='modelparent'),
     path('algebrastudent/', algebrastudent, name='algebrastudent'),
     path('calculusstudent/', calculusstudent, name='calculusstudent'),
@@ -19,7 +21,7 @@ urlpatterns = [
     path('checkview', views.checkview, name='checkview'),
     path('send', views.send, name='send'),
     path('getMessages/<str:room>/', views.getMessages, name='getMessages'),
-    path('aa/', views.home, name='home'),
+    path('aaaa/', views.home, name='home'),
 
 
 ]

@@ -15,7 +15,7 @@
         }
 
         .navbar {
-            background-color: #4cdac2;
+            background-color: #4cdac2; /* Changed navbar color */
         }
 
         .navbar-brand {
@@ -23,56 +23,51 @@
             font-weight: bold;
         }
 
-        .navbar-nav .nav-link {
-            color: #fff;
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
         }
 
-        h2 {
-            color: #A0ADA7;
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        table {
-            width: 80%;
-            margin: auto;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .form-container {
             background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
             padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
-        th {
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
             background-color: #4cdac2;
             color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        td {
-            background-color: #f2f2f2;
-        }
-
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            table {
-                width: 100%;
-            }
+        input[type="submit"]:hover {
+            background-color: #35b198;
         }
     </style>
 </head>
-
 <body>
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
@@ -93,47 +88,13 @@
             <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/">Log out</a>
           </li>
         </ul>
-        <a href="http://127.0.0.1:8000/chat%20with%20admin/?username=" class="btn btn-outline-success">Report a problem</a>
+
+          <a href="http://127.0.0.1:8000/chat%20with%20admin/?username=" class="btn btn-outline-success">Talk to site visitors</a>
+
       </div>
     </div>
   </nav>
 
-  <div class="container">
-    <h2>LecturerClasses</h2>
-    <table>
-      <thread>
-       <tr>
-   <th style="background-color:#4cdac2"><strong>Class</strong></th>
-
-    <th style="background-color:#4cdac2"><strong>Chats</strong></th>
-  </tr>
-        </thread>
-  <tr>
-    <td>Calculus</td>
-
-    <td><a href="http://127.0.0.1:8000/Calculus">link chat</a></td>
-  </tr>
-
-  <tr>
-    <td>Linear Algebra</td>
-    <td><a href="http://127.0.0.1:8000/Algebra">link chat</a></td>
-  </tr>
-
-      </tbody>
-    </table>
-  </div>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-

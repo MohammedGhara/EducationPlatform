@@ -15,6 +15,10 @@ class SignupLecturer(UserCreationForm):
     class Meta:
         model = User
         fields = ['username','email','password1','password2']
+class Signupadmin(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username','email','password1','password2']
 
 class LoginStudent(UserCreationForm):
     class Meta:
