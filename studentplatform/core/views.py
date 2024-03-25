@@ -58,7 +58,7 @@ def loginstudent(request):
         user = authenticate(username=username,password=password)
         if user is not None:
             login(request,user)
-            return redirect('homepage')
+            return redirect('modelstudent')
         else:
             print("Make sure that your Username and password are correct")
             return redirect('loginstudent')
@@ -74,7 +74,7 @@ def loginadmin(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('adminpage')
+            return redirect('http://127.0.0.1:8000/admin/')
         else:
             print("Make sure that your Username and password are correct")
             return redirect('loginadmin')
@@ -111,7 +111,12 @@ def logout_user(request):
     return redirect('loginstudent')
 
 
-
+def class10(request):
+    return render(request,'class10.html')
+def class11(request):
+    return render(request,'class11.html')
+def class12(request):
+    return render(request,'class12.html')
 def modelstudent(request):
     return render(request,'modelstudent.html')
 def modelparent(request):
