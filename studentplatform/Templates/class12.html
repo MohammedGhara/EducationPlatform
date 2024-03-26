@@ -57,12 +57,19 @@
         }
 
         a {
-            color: #007bff;
+            color: #fff;
             text-decoration: none;
+            padding: 8px 12px;
+            background-color: #4cdac2;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         a:hover {
-            text-decoration: underline;
+            background-color: #36b8a4;
+            transform: translateY(-2px);
         }
 
         @media (max-width: 768px) {
@@ -86,14 +93,14 @@
             <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/modelparent/">Back</a>
-          </li>
-
-          <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/">Log out</a>
           </li>
         </ul>
-          <a href="http://127.0.0.1:8000/chat%20with%20admin/?username=" class="btn btn-outline-success">Report a problem</a>
+        <form class="d-flex" role="search" method="get" action="{% url 'search' %}">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </form>
+        <a href="http://127.0.0.1:8000/chat%20with%20admin/?username=" class="btn btn-outline-success">Report a problem</a>
       </div>
     </div>
   </nav>

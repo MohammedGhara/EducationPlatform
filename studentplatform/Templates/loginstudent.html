@@ -6,9 +6,10 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
+            background-color: #f8f9fa;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
             display: flex;
             align-items: center;
             justify-content: center;
@@ -17,35 +18,44 @@
 
         form {
             background-color: #fff;
-            padding: 20px;
+            padding: 40px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            width: 400px;
         }
 
         h1 {
             color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
         }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 16px;
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 24px);
+            padding: 14px;
+            margin-bottom: 24px;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 6px;
             box-sizing: border-box;
+            font-size: 18px;
         }
 
         input[type="submit"] {
-            background-color: #3498db;
+            background-color: #4cdac2;
             color: #fff;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
         }
 
         input[type="submit"]:hover {
-            background-color: #2980b9;
+            background-color: #45b39d;
         }
-
 
     </style>
 
@@ -54,11 +64,10 @@
 
     <form method="post" action="">
         {% csrf_token %}
-        <h1>Login Student</h1>
+        <h1>Login student</h1>
         <input type="text" placeholder="Username" name="username">
         <input type="password" placeholder="Password" name="password">
-        <input style="background-color: #4cdac2" type="submit" value="Login">
-
+        <input type="submit" value="Login">
     </form>
 </body>
 </html>
