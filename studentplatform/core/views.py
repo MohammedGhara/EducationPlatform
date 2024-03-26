@@ -6,7 +6,7 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import  authenticate , login , logout
 from .models import Room , Message
-
+from django.urls import reverse
 
 # Create your views here.
 
@@ -172,4 +172,32 @@ def getMessages(request, room):
     return JsonResponse({"messages":list(messages.values())})
 
 def search(request):
-    return  render(request,'modelstudent.html')
+    query = request.GET.get('query', '').strip().lower()
+    if not query:
+        # No search query was entered
+        return HttpResponse("You did not search for anything.")
+
+    # Define a mapping of keywords to view names (URL names)
+    search_mappings = {
+        'student': 'modelstudent',
+        'Courses Student': 'modelstudent',
+        'lecturer': 'modellecturer',
+        ' Courses lecturer': 'modellecturer',
+        'LecturerClasses': 'modellecturer',
+        'calculs for lecturer': 'modellecturer',
+        'Linear Algebra for lecturer': 'modellecturer',
+        'parent': 'modelparent',
+        'Child Class': 'modelparent',
+        'כיתה י': 'modelparent',
+        'כיתה יא': 'modelparent',
+        'כיתה יב': 'modelparent',
+    }
+
+    # Check if the query matches any of the keywords
+    for keyword, view_name in search_mappings.items():
+        if query == keyword:
+            # Redirect to the matched view
+            return redirect(reverse(view_name))
+
+    # If no matching keyword was found, show a default message or search results page
+    return HttpResponse(f"No results found for '{query}'.")
