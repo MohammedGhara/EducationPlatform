@@ -5,9 +5,9 @@ from django.contrib.auth.models import User
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import  authenticate , login , logout
-from .models import Room , Message
+from .models import Room , Message , Lecturer
 from django.urls import reverse
-
+import os
 # Create your views here.
 
 
@@ -193,11 +193,44 @@ def search(request):
         'כיתה יב': 'modelparent',
     }
 
-    # Check if the query matches any of the keywords
+
     for keyword, view_name in search_mappings.items():
         if query == keyword:
-            # Redirect to the matched view
+
             return redirect(reverse(view_name))
 
-    # If no matching keyword was found, show a default message or search results page
+
     return HttpResponse(f"No results found for '{query}'.")
+
+
+from django.http import HttpResponse
+from django.shortcuts import render
+from .forms import LecturerForm
+from .models import Lecturer
+import os
+
+
+def index(request):
+    if request.method == "POST":
+        form = LecturerForm(request.POST, request.FILES)
+        if form.is_valid():
+            lecturer = form.save()
+            return redirect('index')
+    else:
+        form = LecturerForm()
+
+    lecturer = Lecturer.objects.last()
+    file_path = None
+
+    if lecturer and lecturer.file:
+        file_path = lecturer.file.path
+
+    if file_path and os.path.exists(file_path):
+        file_url = lecturer.file.url
+    else:
+        file_url = None
+
+    return render(request, 'index.html', {'form': form, 'file_url': file_url})
+
+
+
