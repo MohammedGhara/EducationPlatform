@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-outline {
+            margin-bottom: 20px;
+        }
+
+        .form-outline label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-outline input[type="text"],
+        .form-outline input[type="email"],
+        .form-outline textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-outline input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4cdac2;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-outline input[type="submit"]:hover {
+            background-color: #36b8a4;
+        }
+
+        .download-link {
+            display: block;
+            padding: 10px;
+            background-color: #4cdac2;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .download-link:hover {
+            background-color: #36b8a4;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-outline">
+            {{ form.as_p }}
+            <br>
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if file_url %}
+        <a href="{{ file_url }}" class="download-link" download>Download File</a>
+    {% endif %}
+</body>
+</html>
