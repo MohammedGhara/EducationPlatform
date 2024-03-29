@@ -55,16 +55,21 @@
             background-color: #36b8a4;
         }
 
+        .download-link-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
         .download-link {
-            display: block;
-            padding: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
             background-color: #4cdac2;
             color: #fff;
             text-align: center;
             border-radius: 5px;
             text-decoration: none;
             transition: background-color 0.3s ease;
-            margin-top: 20px;
         }
 
         .download-link:hover {
@@ -83,7 +88,9 @@
     </form>
 
     {% if file_url %}
-        <a href="{{ file_url }}" class="download-link" download>Download File</a>
+        <div class="download-link-container">
+            <a href="{{ file_url }}" class="download-link" download>Download File</a>
+        </div>
     {% endif %}
 </body>
 </html>
