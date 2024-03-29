@@ -8,46 +8,50 @@ from django.contrib.auth import  authenticate , login , logout
 from .models import Room , Message , Lecturer
 from django.urls import reverse
 import os
+from django.contrib.auth.models import Group
 # Create your views here.
-
-
+from .decorates import *
 class SignupStudent(CreateView):
     model = User
     form_class = SignupStudent
     template_name = 'signupstudent.html'
 
-
-    def form_valid(self,form):
+    def form_valid(self, form):
         user = form.save()
+        student_group = Group.objects.get(name='student')
+        student_group.user_set.add(user)
         return redirect('homepage')
 
-class Signupadmin(CreateView):
+class SignupAdmin(CreateView):
     model = User
     form_class = Signupadmin
     template_name = 'signupadmin.html'
 
-
-    def form_valid(self,form):
+    def form_valid(self, form):
         user = form.save()
         return redirect('homepage')
+
 class SignupLecturer(CreateView):
     model = User
     form_class = SignupLecturer
     template_name = 'signuplecturer.html'
 
-
-    def form_valid(self,form):
+    def form_valid(self, form):
         user = form.save()
+        lecturer_group = Group.objects.get(name='lecturer')
+        lecturer_group.user_set.add(user)
         return redirect('homepage')
+
 class SignupParent(CreateView):
-        model = User
-        form_class = SignupParent
-        template_name = 'signupparent.html'
+    model = User
+    form_class = SignupParent
+    template_name = 'signupparent.html'
 
-        def form_valid(self, form):
-            user = form.save()
-            return redirect('homepage')
-
+    def form_valid(self, form):
+        user = form.save()
+        parent_group = Group.objects.get(name='parent')
+        parent_group.user_set.add(user)
+        return redirect('homepage')
 
 def loginstudent(request):
     if request.method == "GET" :
@@ -117,11 +121,17 @@ def class11(request):
     return render(request,'class11.html')
 def class12(request):
     return render(request,'class12.html')
+
+@login_required
+@limit_to_student
 def modelstudent(request):
     return render(request,'modelstudent.html')
+@login_required
+@limit_to_parent
 def modelparent(request):
     return render(request, 'modelparent.html')
-
+@login_required
+@limit_to_lecturer
 def modellecturer(request):
     return render(request, 'modellecturer.html')
 def calculusstudent(request):
@@ -133,6 +143,8 @@ def homepage(request):
     return render(request , 'homepage.html')
 def home(request):
     return render(request, 'home.html')
+@login_required
+@limit_to_admin
 def adminpage(request):
     return render(request, 'adminpage.html')
 
