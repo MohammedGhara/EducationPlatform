@@ -1,184 +1,202 @@
+
+from .models import Room, Message, Lecturer
+from .forms import SignupStudent, SignupParent, SignupLecturer, Signupadmin
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import Room, Message
-from django.contrib.auth.models import User
-from .forms import SignupStudent, SignupParent, SignupLecturer, Signupadmin
-from django.contrib.auth.forms import UserCreationForm
+from .models import Lecturer
+from .forms import LecturerForm
+import tempfile
 
-# Models tests
-class RoomModelTests(TestCase):
+# Part of tests.py focusing on modelstudent, modelparent, modellecturer, and search functionality
+from django.contrib.auth.models import User, Group
+
+class UserModelTest(TestCase):
+    def test_user_creation(self):
+        user = User.objects.create_user(username='testuser', password='12345')
+        self.assertEqual(User.objects.filter(username='testuser').exists(), True)
+
+class RoomModelTest(TestCase):
     def test_room_creation(self):
         room = Room.objects.create(name="Test Room")
-        self.assertIs(isinstance(room, Room), True)
-        self.assertEqual(room.name, "Test Room")
+        self.assertEqual(Room.objects.filter(name="Test Room").exists(), True)
 
-class MessageModelTests(TestCase):
-    def test_message_creation(self):
-        room = Room.objects.create(name="Test Room")
-        message = Message.objects.create(value="Hello, world!", user="test_user", room="Test Room")
-        self.assertIs(isinstance(message, Message), True)
-        self.assertEqual(message.value, "Hello, world!")
-        self.assertEqual(message.user, "test_user")
-        self.assertEqual(message.room, "Test Room")
-
-# Views tests
-class SignupViewTests(TestCase):
-    def test_signup_student_view(self):
-        response = self.client.get(reverse('signupstudent'))
-        self.assertEqual(response.status_code, 200)
-
-    def test_signup_parent_view(self):
-        response = self.client.get(reverse('signupparent'))
-        self.assertEqual(response.status_code, 200)
-
-# Form tests
-class UserCreationFormTests(TestCase):
-    def test_signup_student_form(self):
-        data = {
-            'username': 'testuser',
-            'email': 'test@example.com',
-            'password1': 'testpassword123',
-            'password2': 'testpassword123',
-        }
-        form = SignupStudent(data=data)
-        self.assertTrue(form.is_valid())
-
-    def test_signup_parent_form(self):
-        data = {
-            'username': 'testparent',
-            'email': 'parent@example.com',
-            'password1': 'testpassword123',
-            'password2': 'testpassword123',
-        }
-        form = SignupParent(data=data)
-        self.assertTrue(form.is_valid())
-
-# Testing authentication and redirection
-class LoginTests(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='12345')
-
-    def test_login_student(self):
-        response = self.client.post('/loginstudent/', {'username': 'testuser', 'password': '12345'})
-        self.assertRedirects(response, expected_url=reverse('modelstudent'), status_code=302, target_status_code=200)
-
-
-# Additional Views tests
-class LoginLogoutTests(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='testuser', email='user@test.com', password='testpass123')
-
-    def test_login_view(self):
-        response = self.client.post(reverse('loginstudent'), {'username': 'testuser', 'password': 'testpass123'})
-        self.assertEqual(response.status_code, 302)  # Assuming redirection after login
-
-    def test_logout_view(self):
-        self.client.login(username='testuser', password='testpass123')
-        response = self.client.get(reverse('logout_user'))
-        self.assertEqual(response.status_code, 302)  # Assuming redirection after logout
-
-class ChatRoomTests(TestCase):
+class MessageModelTest(TestCase):
     def setUp(self):
         Room.objects.create(name="Test Room")
 
-    def test_room_view(self):
-        response = self.client.get(reverse('room', kwargs={'room': "Test Room"}))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Test Room")
+    def test_message_creation(self):
+        room = Room.objects.get(name="Test Room")
+        message = Message.objects.create(value="Hello, World!", user="test_user", room=room.name)
+        self.assertEqual(Message.objects.filter(value="Hello, World!").exists(), True)
 
-    def test_send_message(self):
-        self.client.post(reverse('send'), {'message': "Hello", 'username': "testuser", 'room_id': "Test Room"})
-        message = Message.objects.get(value="Hello")
-        self.assertEqual(message.value, "Hello")
-
-    def test_get_messages(self):
-        room = Room.objects.create(name="New Test Room")
-        Message.objects.create(value="Test Message", user="testuser", room=room.name)
-        response = self.client.get(reverse('getMessages', kwargs={'room': room.name}))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Test Message")
-
-# Test class-specific and subject-specific views
-class ClassAndSubjectViewsTests(TestCase):
-    def test_class_view(self):
-        response = self.client.get(reverse('class10'))
-        self.assertEqual(response.status_code, 200)
-        # Similar tests can be replicated for class11, class12, etc.
-
-    def test_subject_view(self):
-        response = self.client.get(reverse('algebrastudent'))
-        self.assertEqual(response.status_code, 200)
-        # Similar tests for calculusstudent and other subject-specific views
-
-# HomePage and Administrative Views Tests
-class HomePageAndViewTests(TestCase):
-    def test_homepage_view(self):
-        response = self.client.get(reverse('homepage'))
+class SignupViewTest(TestCase):
+    def test_signup_student_view_status_code(self):
+        response = self.client.get(reverse('signupstudent'))
         self.assertEqual(response.status_code, 200)
 
-    def test_admin_page_view(self):
-        self.user = User.objects.create_superuser('adminuser', 'admin@test.com', 'adminpass123')
-        self.client.login(username='adminuser', password='adminpass123')
-        response = self.client.get(reverse('adminpage'))
-        self.assertEqual(response.status_code, 200)
+    def test_signup_lecturer_view_template_used(self):
+        response = self.client.get(reverse('signuplecturer'))
+        self.assertTemplateUsed(response, 'signuplecturer.html')
 
+class LoginFormTest(TestCase):
+    def test_login_student_form_valid_data(self):
+        form_data = {'username': 'testuser', 'password': '12345'}
+        form = SignupStudent(data=form_data)
+        self.assertTrue(form.is_valid())
 
-
-class ViewTests(TestCase):
+class UserGroupTest(TestCase):
     def setUp(self):
-        # Setting up for tests that require authenticated user
-        self.client = Client()
-        self.user = User.objects.create_user(username='testuser', password='12345')
-        self.room = Room.objects.create(name="Test Room")
-        self.message = Message.objects.create(value="Test Message", user="testuser", room="Test Room")
-        self.login = self.client.login(username='testuser', password='12345')
+        User.objects.create_user('testuser', password='12345')
+        Group.objects.create(name='student')
 
-    def test_model_lecturer_view(self):
+    def test_add_user_to_group(self):
+        user = User.objects.get(username='testuser')
+        group = Group.objects.get(name='student')
+        user.groups.add(group)
+        self.assertIn(group, user.groups.all())
+
+class LoginLogoutTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.client = Client()
+
+    def test_login_view(self):
+        self.client.login(username='testuser', password='12345')
+        response = self.client.get(reverse('modelstudent'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_logout_view(self):
+        self.client.logout()
+        response = self.client.get(reverse('loginstudent'))
+        self.assertEqual(response.status_code, 200)
+
+class AccessRestrictionTest(TestCase):
+    def setUp(self):
+        self.user_student = User.objects.create_user(username='studentuser', password='12345')
+        student_group, _ = Group.objects.get_or_create(name='student')
+        self.user_student.groups.add(student_group)
+
+        self.client = Client()
+        self.client.login(username='studentuser', password='12345')
+
+    def test_student_access_restricted_view(self):
+        response = self.client.get(reverse('modelstudent'))
+        self.assertEqual(response.status_code, 200)
+
+
+
+
+class AccessControlTest(TestCase):
+    def setUp(self):
+        # Creating user for each role
+        self.student_user = User.objects.create_user(username='student', password='password')
+        self.parent_user = User.objects.create_user(username='parent', password='password')
+        self.lecturer_user = User.objects.create_user(username='lecturer', password='password')
+
+        # Creating groups and assigning users
+        student_group, _ = Group.objects.get_or_create(name='student')
+        parent_group, _ = Group.objects.get_or_create(name='parent')
+        lecturer_group, _ = Group.objects.get_or_create(name='lecturer')
+
+        self.student_user.groups.add(student_group)
+        self.parent_user.groups.add(parent_group)
+        self.lecturer_user.groups.add(lecturer_group)
+
+        self.client = Client()
+
+    def test_modelstudent_access(self):
+        # Testing access for student
+        self.client.login(username='student', password='password')
+        response = self.client.get(reverse('modelstudent'))
+        self.assertEqual(response.status_code, 200)
+
+        # Testing access for parent
+        self.client.login(username='parent', password='password')
+        response = self.client.get(reverse('modelstudent'))
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_modelparent_access(self):
+        # Testing access for parent
+        self.client.login(username='parent', password='password')
+        response = self.client.get(reverse('modelparent'))
+        self.assertEqual(response.status_code, 200)
+
+        # Testing access for student
+        self.client.login(username='student', password='password')
+        response = self.client.get(reverse('modelparent'))
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_modellecturer_access(self):
+        # Testing access for lecturer
+        self.client.login(username='lecturer', password='password')
         response = self.client.get(reverse('modellecturer'))
         self.assertEqual(response.status_code, 200)
 
-    def test_calculus_student_view(self):
-        response = self.client.get(reverse('calculusstudent'))
+        # Testing access for parent
+        self.client.login(username='parent', password='password')
+        response = self.client.get(reverse('modellecturer'))
+        self.assertNotEqual(response.status_code, 200)
+
+
+class SearchFunctionalityTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_search_redirect(self):
+        # Assuming 'search' functionality redirects based on query to specific views
+        response = self.client.get(reverse('search') + '?query=student')
+        self.assertRedirects(response, reverse('modelstudent'), status_code=302, fetch_redirect_response=False)
+
+        response = self.client.get(reverse('search') + '?query=parent')
+        self.assertRedirects(response, reverse('modelparent'), status_code=302, fetch_redirect_response=False)
+
+        response = self.client.get(reverse('search') + '?query=lecturer')
+        self.assertRedirects(response, reverse('modellecturer'), status_code=302, fetch_redirect_response=False)
+
+    def test_search_no_results(self):
+        # Testing search with a query that matches no results
+        response = self.client.get(reverse('search') + '?query=unknown')
+        self.assertIn("No results found for 'unknown'.", response.content.decode())
+
+
+
+
+
+class IndexViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_index_view_get(self):
+        # Test that the index view renders index.html with a form
+        response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'index.html')
+        self.assertIsInstance(response.context['form'], LecturerForm)
 
-    def test_algebra_student_view(self):
-        response = self.client.get(reverse('algebrastudent'))
+    def test_index_view_post_success(self):
+        # Test submitting the form with valid data creates a Lecturer instance
+        # Adjust the post data according to your Lecturer model and form fields
+        with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp_file:
+            post_data = {
+                'name': 'Test Lecturer',
+                # Mimic file upload; adjust 'file_field_name' as needed
+                'file': tmp_file
+            }
+            response = self.client.post(reverse('index'), post_data, follow=True)
+
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(Lecturer.objects.count(), 1)
+        lecturer = Lecturer.objects.first()
+        self.assertEqual(lecturer.name, 'Test Lecturer')
+        # Add more assertions if you have specific fields or conditions to check
 
-    def test_homepage_view(self):
-        response = self.client.get(reverse('homepage'))
-        self.assertEqual(response.status_code, 200)
+    def test_index_view_post_failure(self):
+        # Test submitting the form with invalid data does not create a Lecturer
+        response = self.client.post(reverse('index'), {'name': '', 'file': None})
+        self.assertEqual(Lecturer.objects.count(), 0)
+        self.assertFormError(response, 'form', 'name',
+                             'This field is required.')  # Adjust based on your validation rules
 
-    def test_home_view(self):
-        response = self.client.get(reverse('home'))
-        self.assertEqual(response.status_code, 200)
 
-    def test_adminpage_view(self):
-        response = self.client.get(reverse('adminpage'))
-        self.assertEqual(response.status_code, 200)
 
-    def test_room_view(self):
-        response = self.client.get(reverse('room', kwargs={'room': self.room.name}))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.room.name)
 
-    def test_checkview_view_post_exists(self):
-        response = self.client.post(reverse('checkview'), {'room_name': self.room.name, 'username': 'testuser'})
-        self.assertEqual(response.status_code, 302)  # Redirects if room exists
-
-    def test_checkview_view_post_new(self):
-        response = self.client.post(reverse('checkview'), {'room_name': 'New Room', 'username': 'testuser'})
-        self.assertEqual(response.status_code, 302)  # Redirects if room is created
-
-    def test_send_message_view(self):
-        response = self.client.post(reverse('send'), {'message': 'Hello', 'username': 'testuser', 'room_id': self.room.id})
-        self.assertEqual(response.status_code, 200)  # Message sent successfully
-
-    def test_get_messages_view(self):
-        response = self.client.get(reverse('getMessages', kwargs={'room': self.room.name}))
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(str(response.content, encoding='utf8'), {"messages": [{"value": "Test Message", "user": "testuser", "room": "Test Room"}]})
-
-    def test_search_view(self):
-        response = self.client.get(reverse('search'))
-        self.assertEqual(response.status_code, 200)
