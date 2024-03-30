@@ -9,6 +9,7 @@ urlpatterns = [
     path('signupparent/',SignupParent.as_view() , name='signupparent'),
     path('signuplecturer/',SignupLecturer.as_view() , name='signupLecturer'),
     path('loginstudent/',loginstudent, name='loginstudent'),
+    path('logout/',logout_user, name='logout'),
     path('loginadmin/',loginadmin, name='loginadmin'),
     path('loginparent/',loginparent, name='loginparent'),
     path('loginlecturer/',loginlecturer, name='loginlecturer'),

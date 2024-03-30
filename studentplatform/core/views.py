@@ -112,7 +112,7 @@ def loginlecturer(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('loginstudent')
+    return redirect('homepage')
 
 
 def class10(request):
