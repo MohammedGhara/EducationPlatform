@@ -7,7 +7,6 @@ from .models import Lecturer
 from .forms import LecturerForm
 import tempfile
 
-# Part of tests.py focusing on modelstudent, modelparent, modellecturer, and search functionality
 from django.contrib.auth.models import User, Group
 
 class UserModelTest(TestCase):
@@ -88,12 +87,10 @@ class AccessRestrictionTest(TestCase):
 
 class AccessControlTest(TestCase):
     def setUp(self):
-        # Creating user for each role
         self.student_user = User.objects.create_user(username='student', password='password')
         self.parent_user = User.objects.create_user(username='parent', password='password')
         self.lecturer_user = User.objects.create_user(username='lecturer', password='password')
 
-        # Creating groups and assigning users
         student_group, _ = Group.objects.get_or_create(name='student')
         parent_group, _ = Group.objects.get_or_create(name='parent')
         lecturer_group, _ = Group.objects.get_or_create(name='lecturer')
@@ -105,34 +102,26 @@ class AccessControlTest(TestCase):
         self.client = Client()
 
     def test_modelstudent_access(self):
-        # Testing access for student
         self.client.login(username='student', password='password')
         response = self.client.get(reverse('modelstudent'))
         self.assertEqual(response.status_code, 200)
-
-        # Testing access for parent
         self.client.login(username='parent', password='password')
         response = self.client.get(reverse('modelstudent'))
         self.assertNotEqual(response.status_code, 200)
 
     def test_modelparent_access(self):
-        # Testing access for parent
         self.client.login(username='parent', password='password')
         response = self.client.get(reverse('modelparent'))
         self.assertEqual(response.status_code, 200)
-
-        # Testing access for student
         self.client.login(username='student', password='password')
         response = self.client.get(reverse('modelparent'))
         self.assertNotEqual(response.status_code, 200)
 
     def test_modellecturer_access(self):
-        # Testing access for lecturer
         self.client.login(username='lecturer', password='password')
         response = self.client.get(reverse('modellecturer'))
         self.assertEqual(response.status_code, 200)
 
-        # Testing access for parent
         self.client.login(username='parent', password='password')
         response = self.client.get(reverse('modellecturer'))
         self.assertNotEqual(response.status_code, 200)
@@ -154,7 +143,6 @@ class SearchFunctionalityTest(TestCase):
         self.assertRedirects(response, reverse('modellecturer'), status_code=302, fetch_redirect_response=False)
 
     def test_search_no_results(self):
-        # Testing search with a query that matches no results
         response = self.client.get(reverse('search') + '?query=unknown')
         self.assertIn("No results found for 'unknown'.", response.content.decode())
 
@@ -167,19 +155,15 @@ class IndexViewTest(TestCase):
         self.client = Client()
 
     def test_index_view_get(self):
-        # Test that the index view renders index.html with a form
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'index.html')
         self.assertIsInstance(response.context['form'], LecturerForm)
 
     def test_index_view_post_success(self):
-        # Test submitting the form with valid data creates a Lecturer instance
-        # Adjust the post data according to your Lecturer model and form fields
         with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp_file:
             post_data = {
                 'name': 'Test Lecturer',
-                # Mimic file upload; adjust 'file_field_name' as needed
                 'file': tmp_file
             }
             response = self.client.post(reverse('index'), post_data, follow=True)
@@ -188,14 +172,12 @@ class IndexViewTest(TestCase):
         self.assertEqual(Lecturer.objects.count(), 1)
         lecturer = Lecturer.objects.first()
         self.assertEqual(lecturer.name, 'Test Lecturer')
-        # Add more assertions if you have specific fields or conditions to check
 
     def test_index_view_post_failure(self):
-        # Test submitting the form with invalid data does not create a Lecturer
         response = self.client.post(reverse('index'), {'name': '', 'file': None})
         self.assertEqual(Lecturer.objects.count(), 0)
         self.assertFormError(response, 'form', 'name',
-                             'This field is required.')  # Adjust based on your validation rules
+                             'This field is required.')
 
 
 

@@ -9,8 +9,8 @@ from .models import Room , Message , Lecturer
 from django.urls import reverse
 import os
 from django.contrib.auth.models import Group
-# Create your views here.
 from .decorates import *
+from .forms import LecturerForm
 class SignupStudent(CreateView):
     model = User
     form_class = SignupStudent
@@ -67,8 +67,6 @@ def loginstudent(request):
             print("Make sure that your Username and password are correct")
             return redirect('loginstudent')
 
-
-
 def loginadmin(request):
     if request.method == "GET":
         return render(request, 'loginadmin.html')
@@ -95,7 +93,6 @@ def loginparent(request):
         else:
             print("Make sure that your Username and password are correct")
             return redirect('loginparent')
-
 def loginlecturer(request):
     if request.method == "GET" :
         return render(request,'loginlecturer.html')
@@ -109,12 +106,9 @@ def loginlecturer(request):
         else:
             print("Make sure that your Username and password are correct")
             return redirect('loginlecturer')
-
 def logout_user(request):
     logout(request)
     return redirect('homepage')
-
-
 def class10(request):
     return render(request,'class10.html')
 def class11(request):
@@ -172,24 +166,18 @@ def send(request):
     message = request.POST['message']
     username = request.POST['username']
     room_id = request.POST['room_id']
-
     new_message = Message.objects.create(value=message, user=username, room=room_id)
     new_message.save()
     return HttpResponse('Message sent successfully')
 
 def getMessages(request, room):
     room_details = Room.objects.get(name=room)
-
     messages = Message.objects.filter(room=room_details.id)
     return JsonResponse({"messages":list(messages.values())})
-
 def search(request):
     query = request.GET.get('query', '').strip().lower()
     if not query:
-        # No search query was entered
         return HttpResponse("You did not search for anything.")
-
-    # Define a mapping of keywords to view names (URL names)
     search_mappings = {
         'student': 'modelstudent',
         'Courses Student': 'modelstudent',
@@ -204,22 +192,10 @@ def search(request):
         'כיתה יא': 'modelparent',
         'כיתה יב': 'modelparent',
     }
-
-
     for keyword, view_name in search_mappings.items():
         if query == keyword:
-
             return redirect(reverse(view_name))
-
-
     return HttpResponse(f"No results found for '{query}'.")
-
-
-from django.http import HttpResponse
-from django.shortcuts import render
-from .forms import LecturerForm
-from .models import Lecturer
-import os
 
 
 def index(request):
@@ -230,18 +206,14 @@ def index(request):
             return redirect('index')
     else:
         form = LecturerForm()
-
     lecturer = Lecturer.objects.last()
     file_path = None
-
     if lecturer and lecturer.file:
         file_path = lecturer.file.path
-
     if file_path and os.path.exists(file_path):
         file_url = lecturer.file.url
     else:
         file_url = None
-
     return render(request, 'index.html', {'form': form, 'file_url': file_url})
 
 
