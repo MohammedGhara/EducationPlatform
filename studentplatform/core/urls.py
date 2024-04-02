@@ -29,7 +29,7 @@ urlpatterns = [
     path('getMessages/<str:room>/', views.getMessages, name='getMessages'),
     path('aa/', views.home, name='home'),
     path('se', views.getMessages, name='getMessages'),
-    path('search',views.search,name='search'),
+    path('search/',views.search,name='search'),
 
 
 
