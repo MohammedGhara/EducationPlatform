@@ -76,7 +76,7 @@ def loginadmin(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('http://127.0.0.1:8000/admin/')
+            return redirect('http://127.0.0.1:8000/adminpage/')
         else:
             print("Make sure that your Username and password are correct")
             return redirect('loginadmin')
