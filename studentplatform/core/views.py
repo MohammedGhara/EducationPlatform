@@ -32,7 +32,7 @@ class SignupAdmin(CreateView):
         return redirect('homepage')
 
 class SignupLecturer(CreateView):
-    model = User
+    model = Lecturer
     form_class = SignupLecturer
     template_name = 'signuplecturer.html'
 

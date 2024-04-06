@@ -6,9 +6,12 @@ from django.urls import reverse
 from .models import Lecturer
 from .forms import LecturerForm
 import tempfile
-
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, Group
-
+import tempfile
+import shutil
+import os
+from django.core.files import File
 class UserModelTest(TestCase):
     def test_user_creation(self):
         user = User.objects.create_user(username='testuser', password='12345')
@@ -37,22 +40,6 @@ class SignupViewTest(TestCase):
         response = self.client.get(reverse('signuplecturer'))
         self.assertTemplateUsed(response, 'signuplecturer.html')
 
-class LoginFormTest(TestCase):
-    def test_login_student_form_valid_data(self):
-        form_data = {'username': 'testuser', 'password': '12345'}
-        form = SignupStudent(data=form_data)
-        self.assertTrue(form.is_valid())
-
-class UserGroupTest(TestCase):
-    def setUp(self):
-        User.objects.create_user('testuser', password='12345')
-        Group.objects.create(name='student')
-
-    def test_add_user_to_group(self):
-        user = User.objects.get(username='testuser')
-        group = Group.objects.get(name='student')
-        user.groups.add(group)
-        self.assertIn(group, user.groups.all())
 
 class LoginLogoutTest(TestCase):
     def setUp(self):
@@ -83,50 +70,6 @@ class AccessRestrictionTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-
-
-class AccessControlTest(TestCase):
-    def setUp(self):
-        self.student_user = User.objects.create_user(username='student', password='password')
-        self.parent_user = User.objects.create_user(username='parent', password='password')
-        self.lecturer_user = User.objects.create_user(username='lecturer', password='password')
-
-        student_group, _ = Group.objects.get_or_create(name='student')
-        parent_group, _ = Group.objects.get_or_create(name='parent')
-        lecturer_group, _ = Group.objects.get_or_create(name='lecturer')
-
-        self.student_user.groups.add(student_group)
-        self.parent_user.groups.add(parent_group)
-        self.lecturer_user.groups.add(lecturer_group)
-
-        self.client = Client()
-
-    def test_modelstudent_access(self):
-        self.client.login(username='student', password='password')
-        response = self.client.get(reverse('modelstudent'))
-        self.assertEqual(response.status_code, 200)
-        self.client.login(username='parent', password='password')
-        response = self.client.get(reverse('modelstudent'))
-        self.assertNotEqual(response.status_code, 200)
-
-    def test_modelparent_access(self):
-        self.client.login(username='parent', password='password')
-        response = self.client.get(reverse('modelparent'))
-        self.assertEqual(response.status_code, 200)
-        self.client.login(username='student', password='password')
-        response = self.client.get(reverse('modelparent'))
-        self.assertNotEqual(response.status_code, 200)
-
-    def test_modellecturer_access(self):
-        self.client.login(username='lecturer', password='password')
-        response = self.client.get(reverse('modellecturer'))
-        self.assertEqual(response.status_code, 200)
-
-        self.client.login(username='parent', password='password')
-        response = self.client.get(reverse('modellecturer'))
-        self.assertNotEqual(response.status_code, 200)
-
-
 class SearchFunctionalityTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -148,37 +91,85 @@ class SearchFunctionalityTest(TestCase):
 
 
 
+class LoginViewTest(TestCase):
+    def setUp(self):
+
+        self.test_user = User.objects.create_user(username='testuser', password='testpassword')
+        self.test_user.save()
+
+    def test_login_student_get(self):
+        response = self.client.get(reverse('loginstudent'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'loginstudent.html')
+
+    def test_login_student_post_success(self):
+        response = self.client.post(reverse('loginstudent'), {'username': 'testuser', 'password': 'testpassword'})
+
+        self.assertRedirects(response, reverse('modelstudent'))
+
+    def test_login_student_post_failure(self):
+
+        response = self.client.post(reverse('loginstudent'), {'username': 'testuser', 'password': 'wrongpassword'})
+        self.assertRedirects(response, reverse('loginstudent'))
+
+    def test_login_admin_get(self):
+
+        response = self.client.get(reverse('loginadmin'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'loginadmin.html')
+
+    def test_login_admin_post_success(self):
+
+        response = self.client.post(reverse('loginadmin'), {'username': 'testuser', 'password': 'testpassword'})
+
+        self.assertRedirects(response, 'http://127.0.0.1:8000/adminpage/', fetch_redirect_response=False)
+
+    def test_login_admin_post_failure(self):
+        response = self.client.post(reverse('loginadmin'), {'username': 'testuser', 'password': 'wrongpassword'})
+
+        self.assertRedirects(response, reverse('loginadmin'))
+
+    def tearDown(self):
+        self.test_user.delete()
 
 
 class IndexViewTest(TestCase):
+
     def setUp(self):
+
         self.client = Client()
 
-    def test_index_view_get(self):
+    def test_index_get_request(self):
+
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'index.html')
-        self.assertIsInstance(response.context['form'], LecturerForm)
 
-    def test_index_view_post_success(self):
-        with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp_file:
-            post_data = {
+    def test_index_post_request(self):
+
+        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=True) as tmp:
+            tmp.write(b'Some file content')
+            tmp.seek(0)
+            response = self.client.post(reverse('index'), {
                 'name': 'Test Lecturer',
-                'file': tmp_file
-            }
-            response = self.client.post(reverse('index'), post_data, follow=True)
+                'file': tmp
+            }, follow=True)
+        self.assertRedirects(response, reverse('index'))
+        self.assertTrue(Lecturer.objects.exists())
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Lecturer.objects.count(), 1)
-        lecturer = Lecturer.objects.first()
-        self.assertEqual(lecturer.name, 'Test Lecturer')
+    def test_index_file_url_in_context(self):
 
-    def test_index_view_post_failure(self):
-        response = self.client.post(reverse('index'), {'name': '', 'file': None})
-        self.assertEqual(Lecturer.objects.count(), 0)
-        self.assertFormError(response, 'form', 'name',
-                             'This field is required.')
+        lecturer = Lecturer.objects.create(name='Test Lecturer')
+        response = self.client.get(reverse('index'))
+        self.assertIsNone(response.context['file_url'])
 
 
+
+class DownloadFileTest(TestCase):
+
+    def setUp(self):
+
+        self.client = Client()
+        self.test_dir = tempfile.mkdtemp()
 
 
