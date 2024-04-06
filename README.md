@@ -12,7 +12,7 @@ how can use the website:
 
 
 ### Built With
-- visual studio code.
+- Pycharm.
 - Python 3.12
 - Django 4.1.3
 - Sqlite3
@@ -33,6 +33,6 @@ how can use the website:
 
 
 ## License & copyright
-1)Mosab Shaker,2)Mohammed Gara,3)Hasan Mousa,4)Ali heeb
+1)Mosab Shaker,2)Mohammed Gara,3)Hasan Mousa,4)Ali haib
 
-##Enjoy
+## Enjoy
