@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
     <style>
         body {
@@ -9,6 +10,7 @@
             margin: 0;
             padding: 0;
             background-color: #f8f9fa;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
         }
 
         form {
@@ -28,6 +30,7 @@
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
+            color: #4cdac2;
         }
 
         .form-outline input[type="text"],
@@ -37,6 +40,7 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            color: #495057;
         }
 
         .form-outline input[type="submit"] {
@@ -54,27 +58,6 @@
         .form-outline input[type="submit"]:hover {
             background-color: #36b8a4;
         }
-
-        .download-link-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .download-link {
-            padding: 5px 10px;
-            font-size: 14px;
-            background-color: #4cdac2;
-            color: #fff;
-            text-align: center;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .download-link:hover {
-            background-color: #36b8a4;
-        }
     </style>
 </head>
 <body>
@@ -86,11 +69,5 @@
         </div>
         <input type="submit" value="Submit">
     </form>
-
-    {% if file_url %}
-        <div class="download-link-container">
-            <a href="{{ file_url }}" class="download-link" download>Download File</a>
-        </div>
-    {% endif %}
 </body>
 </html>

@@ -206,6 +206,7 @@ def index(request):
             return redirect('index')
     else:
         form = LecturerForm()
+
     lecturer = Lecturer.objects.last()
     file_path = None
     if lecturer and lecturer.file:
@@ -214,7 +215,23 @@ def index(request):
         file_url = lecturer.file.url
     else:
         file_url = None
+
     return render(request, 'index.html', {'form': form, 'file_url': file_url})
+
+
+def download_file(request):
+    lecturer = Lecturer.objects.last()
+    file_path = None
+    if lecturer and lecturer.file:
+        file_path = lecturer.file.path
+
+    if file_path and os.path.exists(file_path):
+        with open(file_path, 'rb') as file:
+            response = HttpResponse(file.read(), content_type='application/force-download')
+            response['Content-Disposition'] = 'attachment; filename=%s' % os.path.basename(file_path)
+            return response
+    else:
+        return HttpResponse("File not found")
 
 
 
