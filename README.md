@@ -1,3 +1,8 @@
+## 🎓 First-Year Project – Education Student Platform
+
+This project was created during my **first year** of studying Software Engineering.  
+It represents my first real attempt at building a **complete web application** – an educational platform for students, parents, lecturers, and admins.
+
 Welcome to the Education Student Platform
 We're excited to have you join our platform dedicated to fostering collaborative learning. Whether you're a student seeking assistance, an educator sharing expertise, or a parent supporting your child's education, our platform provides a space for knowledge exchange and community engagement.
 
