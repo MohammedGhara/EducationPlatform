@@ -26,9 +26,9 @@ how can use the website:
 ### Install
 
 1. Install python (3.12).
-2. Download and open pycharm app and create project to your computer.
+2. Download and open pycharm app and create project to your computer. by cloning,,,
 3. Install Django (use the commands: ```py -m pip install Django```)
-4. migrate the project (use the commands: ```cd .\education-student-platform\``` , ```cd .\studentplatform\``` ).
+4. migrate the project (use the commands: ```cd .\EducationPlatform\``` , ```cd .\studentplatform\``` ).
 5. Run the project (use the command: ```python manage.py runserver```).
 
 
