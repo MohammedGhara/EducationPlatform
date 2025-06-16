@@ -11,6 +11,8 @@ import os
 from django.contrib.auth.models import Group
 from .decorates import *
 from .forms import LecturerForm
+from django.contrib.auth.models import Group
+
 class SignupStudent(CreateView):
     model = User
     form_class = SignupStudent
@@ -30,7 +32,14 @@ class SignupAdmin(CreateView):
     def form_valid(self, form):
         user = form.save()
         return redirect('homepage')
-
+def get_user_role(user):
+    if user.groups.filter(name='student').exists():
+        return 'student'
+    elif user.groups.filter(name='lecturer').exists():
+        return 'lecturer'
+    elif user.groups.filter(name='parent').exists():
+        return 'parent'
+    return None
 class SignupLecturer(CreateView):
     model = Lecturer
     form_class = SignupLecturer
@@ -145,10 +154,22 @@ def adminpage(request):
 def room(request, room):
     username = request.GET.get('username')
     room_details = Room.objects.get(name=room)
+
+    role = get_user_role(request.user)
+    if role == 'student':
+        home_link = '/modelstudent/'
+    elif role == 'lecturer':
+        home_link = '/modellecturer/'
+    elif role == 'parent':
+        home_link = '/modelparent/'
+    else:
+        home_link = '/'
+
     return render(request, 'room.html', {
         'username': username,
         'room': room,
-        'room_details': room_details
+        'room_details': room_details,
+        'home_link': home_link
     })
 
 def checkview(request):

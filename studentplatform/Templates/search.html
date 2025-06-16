@@ -62,10 +62,8 @@ tr:nth-child(even) {
             <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/homepage">Log out</a>
           </li>
         </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+       <input type="text" id="live-search" class="form-control" placeholder="Search..." autocomplete="off">
+<div id="search-results" class="list-group position-absolute mt-1" style="z-index:999;"></div>
       </div>
     </div>
   </nav>

@@ -1,118 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentReference</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
 
-        .navbar {
-            background-color: #4cdac2;
-        }
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f4f7;
+      margin: 0;
+      padding: 0;
+    }
 
-        .navbar-brand {
-            color: #fff;
-            font-weight: bold;
-        }
+    .navbar {
+      background-color: #002b5b;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            text-align: center;
-        }
+    .navbar-brand,
+    .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+    }
 
-        .form-container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
+    .nav-link:hover {
+      color: #cce5ff !important;
+    }
 
-        .form-container h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 20px;
+    }
 
-        label {
-            font-weight: bold;
-        }
+    h2 {
+      text-align: center;
+      color: #002b5b;
+      margin-bottom: 40px;
+      font-weight: bold;
+    }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+    .card {
+      border: none;
+      border-radius: 12px;
+      background-color: #ffffff;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
 
-        input[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4cdac2;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-bottom: 10px;
-        }
+    .card:hover {
+      transform: translateY(-5px);
+    }
 
-        input[type="submit"]:hover {
-            background-color: #35b198;
-        }
+    .card-body {
+      text-align: center;
+      padding: 30px;
+    }
 
-        .custom-btn {
-            padding: 12px 30px;
-            background-color: #4cdac2;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            margin: 10px;
-            transition: background-color 0.3s ease;
-            display: inline-block;
-        }
+    .card-title {
+      color: #002b5b;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
 
-        .custom-btn:hover {
-            background-color: #35b198;
-        }
-    </style>
+    .btn-dashboard {
+      background-color: #4cdac2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-dashboard:hover {
+      background-color: #36b8a4;
+    }
+
+    footer {
+      background-color: #002b5b;
+      color: white;
+      padding: 16px;
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    .icon {
+      font-size: 40px;
+      margin-bottom: 15px;
+      color: #4cdac2;
+    }
+  </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Education Student Platform</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/modelstudent/">Courses</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/logout/">Log out</a>
-          </li>
-        </ul>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand" href="#">Admin Panel</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/logout/">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Dashboard Cards -->
+<div class="dashboard-container">
+  <h2>Welcome to the Admin Dashboard</h2>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+
+    <!-- Users -->
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="icon"><i class="fas fa-users"></i></div>
+          <h5 class="card-title">Manage Users</h5>
+          <p class="card-text">View, edit, or delete users in the system.</p>
+          <a href="/admin/auth/user/" class="btn btn-dashboard">Manage Users</a>
+        </div>
       </div>
     </div>
-  </nav>
 
-  <div class="container">
-      <a href="http://127.0.0.1:8000/admin/" class="custom-btn">Admin Page</a>
-      <a href="http://127.0.0.1:8000/chat%20with%20admin/?username=" class="custom-btn">Chat with Visitor</a>
+
+
+    <!-- Visitor Chat -->
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="icon"><i class="fas fa-comments"></i></div>
+          <h5 class="card-title">Chat with Visitor</h5>
+          <p class="card-text">Open a conversation with platform guests.</p>
+          <a href="/chat%20with%20admin/?username=" class="btn btn-dashboard">Open Chat</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="icon"><i class="fas fa-envelope-open-text"></i></div>
+          <h5 class="card-title">Manage Messages</h5>
+          <p class="card-text">Review or remove messages from chat rooms.</p>
+          <a href="/admin/core/message/" class="btn btn-dashboard">Manage Messages</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rooms -->
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="icon"><i class="fas fa-door-open"></i></div>
+          <h5 class="card-title">Manage Rooms</h5>
+          <p class="card-text">Create, rename, or delete chat rooms.</p>
+          <a href="/admin/core/room/" class="btn btn-dashboard">Manage Rooms</a>
+        </div>
+      </div>
+    </div>
+
   </div>
+</div>
 
+<!-- Footer -->
+<footer>
+  &copy; 2025 Education Platform &mdash; Admin Control Center
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
